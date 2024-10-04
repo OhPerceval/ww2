@@ -54,10 +54,10 @@ type Strategy struct {
 var templates = template.Must(template.ParseGlob("templates/*.html"))
 
 func dbConn() (db *sql.DB) {
-	dbDriver := "mysql"
-	dbUser := "root"
-	dbPass := "root"
-	dbName := "ww2a"
+	dbDriver := "sql7.freemysqlhosting.net"
+	dbUser := "sql7734553"
+	dbPass := "PTKXi89sf1"
+	dbName := "sql7734553"
 	db, err := sql.Open(dbDriver, dbUser+":"+dbPass+"@/"+dbName)
 	if err != nil {
 		panic(err.Error())
