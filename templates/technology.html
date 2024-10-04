@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <title>Technologies et Stratégies Militaires</title>
+</head>
+<body>
+ 
+    <div class="container">
+        <h1>Technologies et Stratégies Militaires</h1>
+        <div class="tabs">
+            <button class="tab-button active" onclick="showSection('technologies')">Technologies</button>
+            <button class="tab-button" onclick="showSection('strategies')">Stratégies</button>
+        </div>
+
+        <div class="content">
+            <div id="technologies" class="tab-content active">
+                <h2>Technologies Militaires</h2>
+                <div class="cards-container" id="technologiesList"></div>
+            </div>
+            <div id="strategies" class="tab-content">
+                <h2>Stratégies Militaires</h2>
+                <div class="cards-container" id="strategiesList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/technology.js"></script>
+</body>
+</html>

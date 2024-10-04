@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biographies des Personnages Clés</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+       .container {
+    display: flex;
+    margin: 20px;
+}
+
+.tabs {
+    width: 30%;
+    height: 300px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.tab {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.tab:hover {
+    background: #f0f0f0;
+}
+
+.tab.active {
+    font-weight: bold;
+    background: #e0e0e0;
+}
+
+.biography {
+    width: 70%;
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    margin-left: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#characterImage {
+    width: 100%; /* Ajustez la taille d'image selon vos préférences */
+    border-radius: 5px;
+}
+
+h2 {
+    margin-top: 0;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="tabs" id="tabs">
+            <!-- Les onglets seront ajoutés ici dynamiquement -->
+        </div>
+
+        
+           
+            <div class="biography" id="biography">
+                <h2 id="biographyTitle">Choisissez un personnage</h2>
+                <img id="characterImage" src="" alt="Image du personnage" style="display: none;">
+                <p id="characterBio"></p>
+            
+                <!-- Section des anecdotes, cachée tant qu'aucun personnage n'est sélectionné -->
+                <div id="anecdotesSection">
+                    <h3>Anecdotes</h3>
+                    <ul id="anecdotesList"></ul>
+                </div>
+            
+                <!-- Section des références, cachée tant qu'aucun personnage n'est sélectionné -->
+                <div id="referencesSection">
+                    <h3>Références</h3>
+                    <ul id="referencesList"></ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="/static/js/biographies.js"></script>
+</body>
+</html>

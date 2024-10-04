@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline de la Seconde Guerre mondiale</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2em;
+            color: #333;
+        }
+        .filters {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .filter-button {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .filter-button:hover {
+            background-color: #005b4f;
+        }
+        .timeline {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 20px 0;
+            position: relative;
+            max-width: 100%;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .timeline-item {
+            flex: 0 0 auto;
+            width: 300px;
+            margin: 0 10px;
+            border-radius: 8px;
+            position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+            background: linear-gradient(135deg, #f0f4c3, #c8e6c9);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .timeline-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        .timeline-item img {
+            width: 100%;
+            border-radius: 8px 8px 0 0;
+        }
+        .content {
+            padding: 15px;
+        }
+        .date {
+            font-weight: bold;
+            color: #00796b;
+            margin-bottom: 5px;
+        }
+        .country {
+            font-style: italic;
+            color: #555;
+        }
+        /* Style pour le curseur */
+        .cursor {
+            position: absolute;
+            width: 100%;
+            height: 5px;
+            background: #00796b;
+            bottom: 10px;
+            left: 0;
+            transition: transform 0.3s;
+        }
+        /* Indicateur de date actuelle */
+        .current-date-indicator {
+            position: absolute;
+            width: 4px;
+            height: 20px;
+            background: red;
+            bottom: 20px;
+            left: 0;
+            transition: transform 0.3s;
+        }
+        /* Ligne de temps */
+        .timeline-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 4px;
+            background: #ccc;
+            width: 100%;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <h1>Timeline de la Seconde Guerre mondiale</h1>
+    
+    <div class="filters">
+        <button class="filter-button" data-filter="all">Tout</button>
+        <button class="filter-button" data-filter="battles">Batailles</button>
+        <button class="filter-button" data-filter="politics">Événements politiques</button>
+        <button class="filter-button" data-filter="agreements">Accords</button>
+    </div>
+
+    <div class="timeline" id="timeline">
+        <div class="timeline-line"></div>
+        {{range .}}
+        <div class="timeline-item" data-category="{{.Category}}">
+            <img src="https://media1.ledevoir.com/images_galerie/nwd_747535_585510/image.jpg" alt="{{.Description}}">
+            <div class="content">
+                <p class="date">{{.StartDate}} - {{.EndDate}}</p>
+                <p>{{.Description}}</p>
+                <p class="country">Pays : {{.Country}}</p>
+            </div>
+        </div>
+        {{end}}
+    </div>
+    <div class="cursor" id="cursor"></div>
+    <div class="current-date-indicator" id="current-date-indicator"></div>
+    <a href="/">Retour à l'accueil</a>
+
+    <script>
+        const timeline = document.getElementById('timeline');
+        const cursor = document.getElementById('cursor');
+        const currentDateIndicator = document.getElementById('current-date-indicator');
+        const filterButtons = document.querySelectorAll('.filter-button');
+
+        // Événement de défilement pour mettre à jour la position du curseur
+        timeline.addEventListener('scroll', () => {
+            const scrollLeft = timeline.scrollLeft;
+            const timelineWidth = timeline.scrollWidth - timeline.clientWidth;
+            const percentage = (scrollLeft / timelineWidth) * 100;
+            cursor.style.transform = `translateX(${percentage}%)`;
+        });
+
+        // Position de l'indicateur de la date actuelle
+        const setCurrentDateIndicator = () => {
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear();
+            const firstItem = timeline.querySelector('.timeline-item');
+            if (firstItem) {
+                const firstDate = new Date(firstItem.querySelector('.date').innerText.split(' - ')[0]);
+                if (currentDate >= firstDate) {
+                    const lastItem = timeline.querySelector('.timeline-item:last-child');
+                    const lastDate = new Date(lastItem.querySelector('.date').innerText.split(' - ')[1]);
+                    if (currentDate <= lastDate) {
+                        const timelineWidth = timeline.scrollWidth - timeline.clientWidth;
+                        const totalTimelineDays = Math.ceil((lastDate - firstDate) / (1000 * 60 * 60 * 24));
+                        const daysFromStart = Math.ceil((currentDate - firstDate) / (1000 * 60 * 60 * 24));
+                        const percentage = (daysFromStart / totalTimelineDays) * 100;
+                        currentDateIndicator.style.transform = `translateX(${percentage}%)`;
+                    }
+                }
+            }
+        };
+
+        // Filtrage des événements
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const filter = button.getAttribute('data-filter');
+                const items = document.querySelectorAll('.timeline-item');
+
+                items.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Initialiser l'indicateur de la date actuelle
+        setCurrentDateIndicator();
+    </script>
+</body>
+</html>
